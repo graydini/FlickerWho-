@@ -6,6 +6,7 @@
 * Track player info
 * Track Gameboard info(Score, Turn, Board state.)
 * Basic realtime comunication between players
+
 # Frontend #
 * Gather player info and intiate pairing
 * Layout board and scoring
