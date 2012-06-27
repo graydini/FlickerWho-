@@ -27,7 +27,28 @@ class Game(models.Model):
 	players = models.ManyToManyField('Player')
 	player1_score = models.IntegerField()
 	player2_score = models.IntegerField()
-        player1_guesses = models.IntegerField()
-        player2_guesses = models.IntegerField()
+	player1_guesses = models.IntegerField()
+	player2_guesses = models.IntegerField()
 	tiles = models.ManyToManyField('Tile')
-	
+#def gather_images():
+#	import flickr_api as flickr
+
+def getFace(photo):
+	"""Takes a response from face api and returns the face_area of the first face found in a picture."""
+	nose = photo['tags'][0]['nose']['y']
+	center = photo['tags'][0]['nose']['x']
+	mouth = photo['tags'][0]['mouth_center']['y']
+	height = photo['height']
+	width = photo['width']
+	ratio = mouth - nose
+	scale_h = height / 100.0
+	scale_w = width / 100.0
+	c_width = int((ratio * 9) * scale_w)
+	c_height = int((ratio * 9) * scale_h)
+	c_left = int((center * scale_w) - ((ratio * 6) * scale_w))
+	c_top = int((nose * scale_h) - ((ratio * 5) * scale_h))
+	face_area = (c_left,c_top,c_left+c_width,c_top+c_height)
+	return face_area
+
+
+

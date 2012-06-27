@@ -1,5 +1,12 @@
 # Django settings for FlickerWho project.
 
+#API KEYS
+
+FLICKR_API = ""
+FLICKR_SECRET = ""
+FACES_API = ""
+FACES_SECRET = ""
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
