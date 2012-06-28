@@ -1,7 +1,7 @@
 # Django settings for FlickerWho project.
 
 #API KEYS
-
+FLICKR_TAGS = ""
 FLICKR_API = ""
 FLICKR_SECRET = ""
 FACES_API = ""
