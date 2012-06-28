@@ -77,7 +77,10 @@ def getFace(photo):
 def recognizeFace(photo_url):
 	from face_client import FaceClient
 	client = FaceClient(settings.FACES_API,settings.FACES_SECRET)
-	photo = client.faces_detect(photo_url)['photos'][0]
+	try:
+		photo = client.faces_detect(photo_url)['photos'][0]
+	except:
+		return False
 	if len(photo['tags']) > 0:
 		return getFace(photo)
 	else:
