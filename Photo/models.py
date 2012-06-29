@@ -30,6 +30,8 @@ class Game(models.Model):
 	player2_score = models.IntegerField(default=0)
 	player1_guesses = models.IntegerField(default=0)
 	player2_guesses = models.IntegerField(default=0)
+	player1_choice = models.CharField(max_length=20)
+	player2_choice = models.CharField(max_length=20)
 	tiles = models.ManyToManyField('Tile')
 def gatherImages():
 	import flickr_api as flickr
