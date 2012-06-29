@@ -115,6 +115,7 @@ def send_message(recipeint,message):
 	if not messages:
 		messages = []
 	messages.append(message)
+	cache.set(m_id,messages)
 
 def respond(request):
 	to_json=[]
