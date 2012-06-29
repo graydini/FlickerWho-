@@ -1,10 +1,12 @@
 myGame = new Object();
+players = [];
 base_url = "/";
+function update_player_list(){}
 function recieve_chat(message){}
 function recieve_guess(guess){}
 function recieve_scores(scores){}
 function start_game(opponent){
-if (opponent != undefined){ params = {'opponent':opponent};}
+if (opponent != undefined){ params = {opponent:opponent};}
 else params = {};
 $.get(base_url+'game/board',params,function(data){
 	if(data != "failed"){
@@ -18,7 +20,24 @@ $.get(base_url+'game/board',params,function(data){
 function recieve_answer(answer){}
 function recieve_clue(clue){}
 function send(command,message){
-$.get(base_url+'game'+command,{'game_id':myGame.id})
+if (command=="choose"){
+$.get(base_url+'game/board',{game_id:myGame.id, choice:message});
+}
+$.get(base_url+'game'+command+'?'+message,{game_id:myGame.id,opponent=myGame.opponent},function(data){
+	switch(command){
+		case "players":
+			players = data;
+			update_player_list();
+			break;
+		case "guess":
+				if (data != ""){
+				
+				}
+			break;
+		case "respond":
+			break;
+	}
+	},"json");
 }
 function poll(){
 $.get(base_url+'game/poll', function(data){
