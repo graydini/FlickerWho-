@@ -13,14 +13,16 @@ def board(request):
 	game_id = request.GET.get('game_id',False)
 	if game_id:
 		try:
+			myGame = Game.objects.get(id=game_id)
+			opponent_username = myGame.players.all()[0].user.username
 			choice = request.GET.get('choice')
 			if choice:
-				pass
-			else:
-				myGame = Game.objects.get(id=game_id)
-				opponent_username = myGame.players.all()[0].user.username
-			
-				
+				game_info = cache.get('game_id_%s' % game_id)
+				if game_info[player.user.username][2] == 1:
+					myGame.player1_choice = choice
+				else:
+					myGame.player2_choice = choice
+				myGame.save()
 		except:
 			return HttpResponse('failed')
 	else:
