@@ -6,5 +6,4 @@ urlpatterns = patterns('Photo.views',
     url(r'^board','board'),
     url(r'^guess','guess'),
     url(r'^poll$','poll'),
-	url(r'^respond$','respond'),
 )

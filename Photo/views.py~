@@ -106,19 +106,15 @@ def send_message(recipeint,message):
 def respond(request):
 	answer = request.GET.get('reply',False)
 	opponent = request.GET['opponent']
-	game_id = 'game_id_%s' % request.GET['game_id']
 	if answer:
 		send_message(opponent,answer)
-		scores = cache.get(game_id)
+		scores = cache.get('game_id_%s' % request.GET['game_id'])
 		scores[opponent][1]+=1 # Incraments moves
 		if answer == 'yes':
 			scores[opponent][0]+= 50 * scores[opponent][1]
 		else:
 			scores[opponent][0]-= 20
-		cache.set(game_id,scores)
-	else:
-		send_message(request.GET['to'],request.GET['message'])
-	return HttpResponse()
+
 def poll(request):
 	m_id = 'u_messages_%s' % request.user.username
 	messages = cache.get(m_id)
