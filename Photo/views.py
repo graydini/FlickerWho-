@@ -106,7 +106,7 @@ def guess(request):
 			send_message(opponent,{"guess":guess,"scores":myScores})
 			to_json = {"solved":False,"scores":myScores}
 	else:
-		send_message(opponent,request.GET['clue'])
+		send_message(opponent,{'clue':request.GET['clue']})
 	return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
 
 def send_message(recipeint,message):
@@ -123,7 +123,7 @@ def respond(request):
 	opponent = request.GET['opponent']
 	game_id = 'game_id_%s' % request.GET['game_id']
 	if answer:
-		send_message(opponent,answer)
+		send_message(opponent,{'answer':answer})
 		scores = cache.get(game_id)
 		scores[opponent][1]+=1 # Incraments moves
 		if answer == 'yes':
