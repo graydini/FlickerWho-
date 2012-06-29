@@ -133,7 +133,7 @@ def respond(request):
 		cache.set(game_id,scores)
 		to_json={"scores":scores}
 	else:
-		send_message(request.GET['to'],request.GET['message'])
+		send_message(request.GET['to'],{"chat":request.GET['message'],"sender":request.user.username})
 	return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
 def poll(request):
 	m_id = 'u_messages_%s' % request.user.username
