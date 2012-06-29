@@ -13,23 +13,23 @@ class Photo(models.Model):
 	date_posted = models.IntegerField()
 class Tile(models.Model):
 	photo = models.ForeignKey('Photo')
-	onboard = models.BooleanField()
+	onboard = models.BooleanField(default=True)
 	row = models.IntegerField()
 	col = models.IntegerField()
 	belongs_to = models.ForeignKey('Player')
 class Player(models.Model):
 	user = models.ForeignKey(User)
 	games = models.ManyToManyField('Game')
-	highest_game_score = models.IntegerField()
-	score = models.IntegerField()
+	highest_game_score = models.IntegerField(default=0)
+	score = models.IntegerField(default=0)
 	friends = models.ManyToManyField('self')
 	enemies = models.ManyToManyField('self')
 class Game(models.Model):
 	players = models.ManyToManyField('Player')
-	player1_score = models.IntegerField()
-	player2_score = models.IntegerField()
-	player1_guesses = models.IntegerField()
-	player2_guesses = models.IntegerField()
+	player1_score = models.IntegerField(default=0)
+	player2_score = models.IntegerField(default=0)
+	player1_guesses = models.IntegerField(default=0)
+	player2_guesses = models.IntegerField(default=0)
 	tiles = models.ManyToManyField('Tile')
 def gatherImages():
 	import flickr_api as flickr
