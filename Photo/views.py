@@ -13,8 +13,14 @@ def board(request):
 	game_id = request.GET.get('game_id',False)
 	if game_id:
 		try:
-			myGame = Game.objects.get(id=game_id)
-			opponent_username = myGame.players.all()[0].user.username
+			choice = request.GET.get('choice')
+			if choice:
+				pass
+			else:
+				myGame = Game.objects.get(id=game_id)
+				opponent_username = myGame.players.all()[0].user.username
+			
+				
 		except:
 			return HttpResponse('failed')
 	else:
@@ -33,7 +39,7 @@ def board(request):
 		myGame.save()
 		myGame.players.add(player)
 		myGame.players.add(opponent)
-		cache.set('game_id_%s' % game_id,{player.user.username:[0,0],opponent_username:[0,0]})
+		cache.set('game_id_%s' % game_id,{player.user.username:[0,0,1],opponent_username:[0,0,2]})
 		photos = Photo.objects.filter(has_face=True).order_by('?')[:20]
 		row = 0
 		col = 0
@@ -79,19 +85,24 @@ def guess(request):
 	if guess:
 		if im_player_1:
 			opponent_choice = myGame.player2_choice
+			myGame.player2_score = myScores[request.user.username][0]
 			myGame.player2_guesses += 1
 			myGame.player2_score -= (myGame.player2_guesses * 50)
+			myScores[request.user.username][0] = myGame.player2_score
 		else:
 			opponent_choice = myGame.player1_choice
+			myGame.player1_score = myScores[request.user.username][0]
 			myGame.player1_guesses += 1
 			myGame.player1_score -= (myGame.player1_guesses * 50)
+			myScores[request.user.username][0] = myGame.player1_score
+		cache.set('game_id_%s' % game_id, myScores)
 		if solve == opponent_choice:
-			send_message(opponent,{"guess":"solved"})
-			to_json = {"solved":True}
+			send_message(opponent,{"guess":"solved","scores":myScores})
+			to_json = {"solved":True,"scores":myScores}
 		else:
 			myGame.save()
-			send_message(opponent,{"guess":guess})
-			to_json = {"solved":False}
+			send_message(opponent,{"guess":guess,"scores":myScores})
+			to_json = {"solved":False,"scores":myScores}
 	else:
 		send_message(opponent,request.GET['clue'])
 	return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
@@ -104,6 +115,7 @@ def send_message(recipeint,message):
 	messages.append(message)
 
 def respond(request):
+	to_json=[]
 	answer = request.GET.get('reply',False)
 	opponent = request.GET['opponent']
 	game_id = 'game_id_%s' % request.GET['game_id']
@@ -116,9 +128,10 @@ def respond(request):
 		else:
 			scores[opponent][0]-= 20
 		cache.set(game_id,scores)
+		to_json={"scores":scores}
 	else:
 		send_message(request.GET['to'],request.GET['message'])
-	return HttpResponse()
+	return HttpResponse(simplejson.dumps(to_json), mimetype='application/json')
 def poll(request):
 	m_id = 'u_messages_%s' % request.user.username
 	messages = cache.get(m_id)

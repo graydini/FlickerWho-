@@ -4,8 +4,8 @@
 * <del>Send photos to facecial recognition service store face geography</del>
 * <del>Delete photos without faces from filesystem, keep info</del>
 * Track player info
-* Track Gameboard info(Score, Turn, Board state.)
-* Basic realtime comunication between players
+* <del>Track Gameboard info(Score, Turn, Board state.)</del>
+* <del>Basic realtime comunication between players</del>
 
 # Frontend #
 * Gather player info and intiate pairing
